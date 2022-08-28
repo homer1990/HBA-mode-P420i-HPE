@@ -45,7 +45,7 @@ function enabl () {
     ssacli controller slot=$slot modify hbamode=on
     er=$?
     if  [ $er -ne 0 ]; then
-        echo "Command failed with error: $er\nBye!"
+        echo "Could not set controller on slot $slot to HBA mode."
         return $er
     else echo ""
     fi
@@ -53,14 +53,9 @@ function enabl () {
     ssacli controller slot=$slot show | grep -i hba
     er=$?
     if  [ $er -ne 0 ]; then
-        echo "Verify command failed with error: $er\nBye!"
+        echo "Slot information command failed!"
         return $er
     else echo ""
-    fi
-    if [ $er!="HBA Mode Enabled: True" ]; then
-        echo "HBA mode is not enabled. No clue as to why."
-        return $er
-    else echo "All good!"
     fi
     return
 }
@@ -76,14 +71,9 @@ function disabl () {
     echo "Verifying... Output of 'ssacli controller slot=$slot show | grep -i hba':"
     ssacli controller slot=$slot show | grep -i hba
     er=$?
-    if [ $er -eq 1 ]; then
+    if [ $er -ne 0 ]; then
         echo "Verify command failed with error: $er\nBye!"
         return $er
-    fi
-    if [ "$er" -ne "HBA Mode Enabled: False" ]; then
-        echo "HBA mode is not disabled. No clue as to why."
-        return $er
-    else echo "All good!"
     fi
     return
 }
@@ -120,7 +110,6 @@ function interact () {
         enabl
         er=$?
         if [ $er -ne 0 ]; then
-            echo "Error enabling HBA mode on slot $slot, exiting..."
             return $er
         fi
         return
@@ -128,7 +117,6 @@ function interact () {
         disabl
         er=$?
         if [ $er -ne 0 ]; then
-            echo "Error disabling HBA mode on slot $slot, exiting..."
             return $er
         fi
         return true
@@ -146,7 +134,7 @@ function setup () {
     echo "\n Verifying internet connectivity..."
     ping 8.8.8.8 -c 4
     er=$?
-    if [ ! $er ] ; then
+    if [ $er -ne 0 ] ; then
         echo "You have no internet connection! Try switching around the cables or the router/ip config... \n (REMEMBER, the RJ-45 port on the mobo is for iLO4, cannot be used as a NIC)"
         echo "Bye!"
         return $er
@@ -156,7 +144,7 @@ function setup () {
     echo "Verifying DNS functionality..."
     ping google.com -c 4
     er=$?
-    if [ ! $er ]; then
+    if [ $er -ne 0 ]; then
         echo "Check your DNS configuration, cannot resolve google.com. Bye!"
         return $er
     fi
@@ -204,7 +192,7 @@ function setup () {
     if [ $er -ne 0 ] ; then
         sudo pacman -S --needed --noconfirm wget
         er=$?
-        if [ $er-ne 0 ] ; then
+        if [ $er -ne 0 ] ; then
             echo "install of package wget failed. Exiting..."
             exit
         fi
@@ -250,6 +238,7 @@ function setup () {
     #Build the package
     echo "Building the ssacli package..."
     su nobody -c 'makepkg -si' > /dev/null
+    $er=$?
     if [ $er -ne 0 ]; then
         echo "Could not complete building of the ssacli package. \n Error: \n $er \n Bye!"
         return $er
