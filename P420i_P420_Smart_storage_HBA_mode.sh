@@ -178,11 +178,6 @@ function setup () {
         return $er
     fi
     echo "...OK!"
-    #--------------------------------------------------------------------|
-    #  Actual depedency installation, the guide I found had it wrong     |
-    #  (the current version of RescueCD cannot install all the packages  |
-    #   of the base-devel group, anything besides fakeroot fails)        |
-    #--------------------------------------------------------------------|
     #Checking packages one-by-one
     sudo pacman -Qi fakeroot > /dev/null
     er=$?
@@ -280,7 +275,6 @@ function setup () {
         echo "One of the copy commands failed.\nError:\n$er\nBye!"
         return $er
     fi
-    #This was dead-wrong in the guide, it had rehash instead of hash -r, rehash does not currently exist on systemRescue
     hash -r > /dev/null
     er=$?
     if [ $er -ne 0 ]; then
