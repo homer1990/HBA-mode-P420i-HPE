@@ -42,7 +42,7 @@ function first_text () {
     echo " for any machine and OS the script is used on."
     echo " Any undesireable, harmfull, property damaging, health damaging effects that result"
     echo " concurrently with, during, or after the execution of this script,"
-    ecgo " you accept that they result from your (or the user's) actions, and not"
+    echo " you accept that they result from your (or the user's) actions, and not"
     echo " results of the execution of the script. You must not use this script on any machine"
     echo " you do not own. You must not use this script in any usage scenario wherein production"
     echo " data loss, bodily harm, property damage, loss of life, loss of service of any type,"
