@@ -1,8 +1,7 @@
 #!/bin/bash
 #Setting up some things...
-shopt -s xpg_echo
-echo -e "\033[38;5;223;48;5;23m"
-ru=0
+shopt -s xpg_echo #Color capable console
+echo -e "\033[38;5;223;48;5;23m" #Background and foreground colors
 er=0
 slot=0
 today="$(date +'%d/%m/%Y')"
@@ -16,7 +15,7 @@ function check_ssacli () {
         setup
         er=$?
         if  [ $er -ne 0 ]; then
-            echo "There was an error setting up the environment, quiting..."
+            echo "There was an error setting up the environment, quitting..."
             exit 1
         else echo "Setup complete!"
         fi
@@ -29,15 +28,30 @@ function check_ssacli () {
 function first_text () {
     echo "Today is $today and the time is $now."
     echo "This is Homer27081990's script for enabling HBA mode on the HP smart array P420i controllers, on DL380-360p HPE servers."
-    echo "I don't care about who uses this or what for, just that:"
-    echo "-You are using it on your own system"
-    echo "-There is no danger of data loss to any pools on the server you are tinkering with"
-    echo "-You understand that this is a simple bash execution script, it dosen't actually do anything by itself, so any problems are caused by programs in this script and not the script itself"
-    echo "-You read and understand what the script does (more-or-less) and are not using it blindly without understanding what you are doing right now"
-    echo "-Understand that this script is meant to be run only on a SystemRescue (the linux distro) live CD terminal and nowhere else"
-    echo "-Understand that this was written in the 27th of August, 2022. Any newer, incompatible or missing software... Well... I can't do anything about that from the past..."
-    echo "-Understand that you must !NOT! RUN THIS FROM INSIDE A VM! SystemRescue live CD MUST be running on bare metal"
-    echo "-Accept all of the above"
+    echo "Make sure the following is true:"
+    echo "-You are using this script on a system you own."
+    echo "-There is no danger of production data loss on the server you are working on."
+    echo "-You understand that this is a simple bash execution script, it dosen't actually do anything by itself, so any problems are caused by programs in this script and not the script itself."
+    echo "-You read the script code and understand what the it does (more-or-less) and are not using it blindly without understanding what you are doing right now."
+    echo "-Understand that this script is meant to be run only on a SystemRescue (the linux distro) live CD shell, running on a HPE server with either the P420i or P420 array controllers and nowhere else."
+    echo "-Understand that this was created in the 27th of August, 2022. No support is provided."
+    echo "-Understand that running this in a VM on a HPE server will not work."
+    echo " DISCLAIMER: this script is provided on an as-is basis,"
+    echo " without any guarantee of acceptable or good or non-harmfull"
+    echo " operation and especially without any guarantee of data retention"
+    echo " for any machine and OS the script is used on."
+    echo " Any undesireable, harmfull, property damaging, health damaging effects that result"
+    echo " concurrently with, during, or after the execution of this script,"
+    ecgo " you accept that they result from your (or the user's) actions, and not"
+    echo " results of the execution of the script. You must not use this script on any machine"
+    echo " you do not own. You must not use this script in any usage scenario wherein production"
+    echo " data loss, bodily harm, property damage, loss of life, loss of service of any type,"
+    echo " disruption of service of any type, privacy law violations can occur. This script was"
+    echo " created for strictly personal use on non-production machines, with a very specific"
+    echo " usage scenario in mind, for a very specific hardware configuration, using very specific"
+    echo " software of a very specific time. For any production HPE servers, in any scenario,"
+    echo " unless you can fully understand what this script does, to what and why, please contact"
+    echo " HPE support in order to recieve assistance from certified personnel."
 }
 function enabl () {
     check_ssacli
@@ -104,7 +118,7 @@ function interact () {
     if ! [[ $input =~ $re ]] ; then
         echo "Must enter a number!"
     elif [ $input -eq 4 ]; then
-        $ru=-2
+        echo "Bye!"
         return
     elif [ $input -eq 1 ]; then
         enabl
